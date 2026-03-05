@@ -2,12 +2,12 @@
 
 ## Major tasks and subtasks
 
-- [ ] 1. プロジェクト初期設定
-- [ ] 1.1 Python (FastAPI) 開発環境の初期化と依存関係追加 (P)
+- [x] 1. プロジェクト初期設定
+- [x] 1.1 Python (FastAPI) 開発環境の初期化と依存関係追加 (P)
   - 仮想環境作成、`requirements.txt` または `pyproject.toml` に FastAPI, Uvicorn, Pydantic, pytest を追加
   - 推定時間: 1.5 時間
   - _Requirements: 3.1, 3.3, 5.1_
-- [ ] 1.2 Next.js プロジェクトの初期化と基本ページ作成 (P)
+- [x] 1.2 Next.js プロジェクトの初期化と基本ページ作成 (P)
   - Next.js アプリを作成し、ページルート `/` を用意して開発ビルドが通る状態にする
   - 推定時間: 1.5 時間
   - _Requirements: 4.1, 4.2_
