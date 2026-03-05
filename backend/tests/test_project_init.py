@@ -6,12 +6,15 @@ import json
 class TestProjectInit(unittest.TestCase):
     def test_backend_requirements_exists_and_contains_packages(self):
         self.assertTrue(
-            os.path.exists("requirements.txt"), "requirements.txt is missing"
+            os.path.exists(os.path.join("backend", "requirements.txt")),
+            "backend/requirements.txt is missing",
         )
-        with open("requirements.txt", "r", encoding="utf-8") as f:
+        with open(
+            os.path.join("backend", "requirements.txt"), "r", encoding="utf-8"
+        ) as f:
             content = f.read()
         for pkg in ["fastapi", "uvicorn", "pydantic", "pytest"]:
-            self.assertIn(pkg, content, f"{pkg} not listed in requirements.txt")
+            self.assertIn(pkg, content, f"{pkg} not listed in backend/requirements.txt")
 
     def test_frontend_package_json_contains_next(self):
         self.assertTrue(os.path.exists("package.json"), "package.json is missing")
