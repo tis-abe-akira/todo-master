@@ -1,11 +1,10 @@
 """Task 1.2 verification test: .env.example が正しく存在し、GEMINI_API_KEY= を含むことを確認する。"""
+
 import os
 import unittest
 
 
-REPO_ROOT = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..")
-)
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
 class TestEnvExample(unittest.TestCase):
