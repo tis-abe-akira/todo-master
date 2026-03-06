@@ -35,18 +35,18 @@
   - `GeminiServiceError` および `GeminiConfigError` 発生時は HTTP 503 + 再試行案内 JSON を返す `@app.exception_handler` を追加する
   - _Requirements: 1.1, 1.3, 1.4, 5.2_
 
-- [ ] 4. バックエンドテスト
-- [ ] 4.1 SubtaskService 単体テスト
+- [x] 4. バックエンドテスト
+- [x] 4.1 SubtaskService 単体テスト
   - `ChatGoogleGenerativeAI` を `unittest.mock.patch` でモックし、`generate_subtasks()` が `SubtaskListOutput` を正しく返すことを検証する
   - `GEMINI_API_KEY` 未設定時に `GeminiConfigError` が送出されることを検証する
   - Gemini API 呼び出し失敗時に `GeminiServiceError` が送出されることを検証する
   - タイムアウト発生時に `GeminiServiceError` が送出されることを検証する
   - _Requirements: 1.1, 1.5, 5.1, 5.2, 5.4_
-- [ ] 4.2 エンドポイント統合テスト
+- [x] 4.2 エンドポイント統合テスト
   - `generate_subtasks` をモックして `POST /api/todos/{id}/subtasks` が HTTP 200 + subtasks 配列を返すことを `TestClient` で検証する
   - 存在しない `id` に対して HTTP 404 が返ることを検証する
   - `GeminiServiceError` 発生時に HTTP 503 が返ることを検証する
-  - 既存の 51 件テストをすべて実行して regression がないことを確認する
+  - 既存の 51 件テストをすべて実行して regression がないことを確認する（105 件全 PASS 確認済）
   - _Requirements: 1.3, 1.4, 6.3_
 
 - [ ] 5. フロントエンド型定義と API フック (P)
