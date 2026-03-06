@@ -13,16 +13,16 @@
   - _Requirements: 5.1_
 
 - [ ] 2. AI サブタスク生成サービスの実装
-- [ ] 2.1 サブタスク用データモデルの実装
+- [x] 2.1 サブタスク用データモデルの実装
   - `Subtask`（`title` フィールドのみ）と `SubtaskListOutput`（5〜6 件の `subtasks` リスト）の Pydantic モデルを定義する
   - `GeminiServiceError`（API 呼び出し失敗・タイムアウト用）と `GeminiConfigError`（API キー未設定用）の例外クラスを定義する
   - _Requirements: 1.5, 1.2_
-- [ ] 2.2 大仰プロンプトテンプレートと生成関数の実装
+- [x] 2.2 大仰プロンプトテンプレートと生成関数の実装
   - PMBOK・ROI・ステークホルダー分析・競合分析・サプライチェーンリスク管理などのコンサルティングフレームワークを駆使して些細なタスクを壮大なプロジェクトに昇華させる System プロンプトを定数として定義する
   - `ChatPromptTemplate` で System + Human メッセージを組み立て、`ChatGoogleGenerativeAI` と `with_structured_output(SubtaskListOutput)` を連結したチェーンを構築する
   - `generate_subtasks(title, description, api_key, model, timeout)` 関数を実装し、チェーンを呼び出して `list[Subtask]` を返す
   - _Requirements: 1.1, 2.1, 2.2, 2.3, 2.4, 2.5_
-- [ ] 2.3 API キー検証・ロギング・エラーハンドリングの実装
+- [x] 2.3 API キー検証・ロギング・エラーハンドリングの実装
   - `GEMINI_API_KEY` が空の場合は `GeminiConfigError` を送出し、INFO ログに使用モデル名を出力する
   - タイムアウト（30 秒）超過・Gemini API 呼び出し失敗をすべて `GeminiServiceError` にラップする
   - サブタスク生成リクエスト受信時と成功時に INFO レベルでログを出力する
