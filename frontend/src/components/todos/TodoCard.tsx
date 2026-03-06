@@ -4,8 +4,11 @@ import { useState, type ChangeEvent } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { Spinner } from "@/components/ui/Spinner";
 import { useUpdateTodo } from "@/hooks/useUpdateTodo";
 import { useDeleteTodo } from "@/hooks/useDeleteTodo";
+import { useGenerateSubtasks } from "@/hooks/useGenerateSubtasks";
+import { SubtaskList } from "./SubtaskList";
 import type { Todo } from "@/types/todo";
 
 type TodoCardProps = { todo: Todo };
@@ -22,6 +25,12 @@ export function TodoCard({ todo }: TodoCardProps) {
     reset: resetUpdate,
   } = useUpdateTodo();
   const { remove, isDeleting, error: deleteError } = useDeleteTodo();
+  const {
+    generate,
+    subtasks,
+    isGenerating,
+    error: generateError,
+  } = useGenerateSubtasks();
 
   async function handleToggleCompleted() {
     await update(todo.id, { completed: !todo.completed });
@@ -59,7 +68,7 @@ export function TodoCard({ todo }: TodoCardProps) {
         <input
           type="checkbox"
           checked={todo.completed}
-          disabled={isSaving || isDeleting}
+          disabled={isSaving || isDeleting || isGenerating}
           onChange={handleToggleCompleted}
           className="mt-0.5 w-4 h-4 accent-[#2D2D2D] cursor-pointer disabled:cursor-not-allowed"
           aria-label={todo.completed ? "未完了に戻す" : "完了にする"}
@@ -122,13 +131,21 @@ export function TodoCard({ todo }: TodoCardProps) {
           </div>
         )}
 
-        {/* 編集・削除ボタン（表示モード時のみ） */}
+        {/* 編集・削除・サブタスク分解ボタン（表示モード時のみ） */}
         {!isEditing && (
-          <div className="flex items-center gap-1 shrink-0">
+          <div className="flex items-center gap-1 shrink-0 flex-wrap justify-end">
+            <Button
+              variant="secondary"
+              onClick={() => generate(todo.id)}
+              disabled={isDeleting || isSaving || isGenerating}
+              className="px-3 h-8 text-xs flex items-center gap-1"
+            >
+              {isGenerating ? <Spinner /> : "🤖"} サブタスク分解
+            </Button>
             <Button
               variant="secondary"
               onClick={() => setIsEditing(true)}
-              disabled={isDeleting || isSaving}
+              disabled={isDeleting || isSaving || isGenerating}
               className="px-3 h-8 text-xs"
             >
               編集
@@ -136,7 +153,7 @@ export function TodoCard({ todo }: TodoCardProps) {
             <Button
               variant="danger"
               onClick={() => remove(todo.id)}
-              disabled={isDeleting || isSaving}
+              disabled={isDeleting || isSaving || isGenerating}
               className="px-3 h-8 text-xs"
             >
               {isDeleting ? "削除中…" : "削除"}
@@ -146,9 +163,14 @@ export function TodoCard({ todo }: TodoCardProps) {
       </div>
 
       {/* エラー表示 */}
-      {(updateError || deleteError) && (
-        <ErrorMessage message={updateError ?? deleteError ?? undefined} />
+      {(updateError || deleteError || generateError) && (
+        <ErrorMessage
+          message={updateError ?? deleteError ?? generateError ?? undefined}
+        />
       )}
+
+      {/* サブタスクリスト */}
+      {subtasks.length > 0 && <SubtaskList subtasks={subtasks} />}
     </Card>
   );
 }

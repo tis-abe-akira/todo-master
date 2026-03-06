@@ -3,8 +3,18 @@ import logging
 import os
 import uuid
 
+from dotenv import load_dotenv
+
 from .local_store import LocalStore
 from .models import CreateTodo, Todo, UpdateTodo
+from .subtask_service import (
+    GeminiConfigError,
+    GeminiServiceError,
+    SubtasksResponse,
+    generate_subtasks,
+)
+
+load_dotenv()
 
 logger = logging.getLogger("todo_app")
 
@@ -113,6 +123,52 @@ def create_app(store_path: str):
     def create_todo(payload: CreateTodo):
         todo_dict = create_and_persist_todo(app.state.store, payload)
         return JSONResponse(content=todo_dict, status_code=201)
+
+    # ─── Gemini 例外ハンドラ ────────────────────────────────────────────────
+
+    @app.exception_handler(GeminiServiceError)
+    async def gemini_service_error_handler(request: Request, exc: GeminiServiceError):
+        logger.error("gemini service error: %s", exc)
+        return JSONResponse(
+            status_code=503,
+            content={
+                "detail": "AIサービスが一時的に利用できません。時間をおいて再試行してください。"
+            },
+        )
+
+    @app.exception_handler(GeminiConfigError)
+    async def gemini_config_error_handler(request: Request, exc: GeminiConfigError):
+        logger.error("gemini config error: %s", exc)
+        return JSONResponse(
+            status_code=503,
+            content={
+                "detail": "AIサービスの設定が不正です。GEMINI_API_KEY を確認の上、再試行してください。"
+            },
+        )
+
+    # ─── サブタスク生成エンドポイント ──────────────────────────────────────
+
+    @app.post(
+        "/api/todos/{todo_id}/subtasks",
+        response_model=SubtasksResponse,
+        status_code=200,
+    )
+    def create_subtasks(todo_id: str):
+        from fastapi import HTTPException
+
+        # 対象 Todo の存在確認
+        todos = list_todos(app.state.store)
+        todo = next((t for t in todos if t["id"] == todo_id), None)
+        if todo is None:
+            raise HTTPException(status_code=404, detail=f"Todo '{todo_id}' not found")
+
+        api_key = os.environ.get("GEMINI_API_KEY", "")
+        subtasks = generate_subtasks(
+            title=todo["title"],
+            description=todo.get("description"),
+            api_key=api_key,
+        )
+        return SubtasksResponse(subtasks=subtasks)
 
     return app
 

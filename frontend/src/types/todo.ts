@@ -17,3 +17,11 @@ export type UpdateTodoRequest = {
   description?: string;
   completed?: boolean;
 };
+
+export type Subtask = {
+  title: string;
+};
+
+export type SubtasksResponse = {
+  subtasks: Subtask[];
+};
