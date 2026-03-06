@@ -55,11 +55,14 @@ class TestApiUpdateTodo(unittest.TestCase):
         )
 
         import time
+
         time.sleep(1)  # 秒単位の差を確実に出す
 
         update_todo(store, todo_id, UpdateTodo(title="Changed"))
         items = list_todos(store)
-        new_updated_at = next(item["updated_at"] for item in items if item["id"] == todo_id)
+        new_updated_at = next(
+            item["updated_at"] for item in items if item["id"] == todo_id
+        )
 
         self.assertNotEqual(original_updated_at, new_updated_at)
 
@@ -86,6 +89,7 @@ class TestApiUpdateTodo(unittest.TestCase):
         update_todo(store, original["id"], UpdateTodo(completed=True))
 
         from backend.app.main import list_todos
+
         items = list_todos(store)
         item = next(i for i in items if i["id"] == original["id"])
 

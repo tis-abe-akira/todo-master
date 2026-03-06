@@ -72,6 +72,7 @@ def create_app(store_path: str):
     @app.put("/api/todos/{todo_id}", response_model=Todo, status_code=200)
     def put_todo(todo_id: str, payload: UpdateTodo):
         from fastapi import HTTPException
+
         try:
             return update_todo(app.state.store, todo_id, payload)
         except KeyError:
@@ -81,6 +82,7 @@ def create_app(store_path: str):
     def remove_todo(todo_id: str):
         from fastapi import HTTPException
         from fastapi.responses import Response
+
         try:
             delete_todo(app.state.store, todo_id)
             return Response(status_code=204)
