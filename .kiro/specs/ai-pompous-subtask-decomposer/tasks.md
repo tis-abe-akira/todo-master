@@ -49,29 +49,29 @@
   - 既存の 51 件テストをすべて実行して regression がないことを確認する（105 件全 PASS 確認済）
   - _Requirements: 1.3, 1.4, 6.3_
 
-- [ ] 5. フロントエンド型定義と API フック (P)
-- [ ] 5.1 (P) サブタスク関連の TypeScript 型定義の追加
+- [x] 5. フロントエンド型定義と API フック (P)
+- [x] 5.1 (P) サブタスク関連の TypeScript 型定義の追加
   - `Subtask`（`title: string`）と `SubtasksResponse`（`subtasks: Subtask[]`）型を追加する
   - `any` の使用を禁止し、すべてのフィールドを明示的な型で定義する
   - _Requirements: 1.5_
-- [ ] 5.2 (P) useGenerateSubtasks カスタムフックの実装
+- [x] 5.2 (P) useGenerateSubtasks カスタムフックの実装
   - `subtasks`・`isGenerating`・`error` の state と `generate(todoId)` 関数を持つフックを実装する
   - `api.post<SubtasksResponse>` でバックエンドを呼び出し、成功時は `subtasks` state を更新（再生成時は上書き）する
   - `ApiError` をキャッチして `error` state に文字列をセットし、`finally` で `isGenerating` をリセットする（`useUpdateTodo` と同パターン）
   - _Requirements: 3.2, 3.4, 4.4_
 
-- [ ] 6. サブタスク表示コンポーネントの実装 (P)
-- [ ] 6.1 (P) SubtaskItem コンポーネントの実装
+- [x] 6. サブタスク表示コンポーネントの実装 (P)
+- [x] 6.1 (P) SubtaskItem コンポーネントの実装
   - `index`（番号表示用）と `title` を props として受け取り、`index + 1` を前置した番号付き表示をレンダリングする
   - 既存の UI カラー変数（`text-[#5C5A55]`・`text-xs` 等）に準拠したスタイリングを適用する
   - _Requirements: 4.2, 3.6_
-- [ ] 6.2 (P) SubtaskList コンポーネントの実装
+- [x] 6.2 (P) SubtaskList コンポーネントの実装
   - `subtasks` props が空配列のとき `null` を返す（非表示）
   - Tailwind の `transition-all` + `max-height` によるアニメーション付き展開・収縮を実装する
   - `SubtaskItem` を `subtasks.map()` でレンダリングし、上部に境界線（`border-t border-[#E8E6E1]`）を設ける
   - _Requirements: 4.1, 4.3, 4.5_
 
-- [ ] 7. TodoCard への統合とエンドツーエンド動作確認
+- [x] 7. TodoCard への統合とエンドツーエンド動作確認
   - `useGenerateSubtasks` フックを `TodoCard` に追加し、「🤖 サブタスク分解」ボタンを非編集モード時のボタン群に追加する
   - `isGenerating` を既存の `isSaving || isDeleting` の disabled 判定に加え、ボタンクリック中の多重送信を防止する
   - `subtasks.length > 0` のとき `<SubtaskList subtasks={subtasks} />` を `Card` 最下部にレンダリングし、エラー時は `<ErrorMessage>` を表示する

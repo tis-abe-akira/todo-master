@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "ec400d3e-17af-44a0-acd2-602c80e70e26",
+    "title": "牛乳を買いに行く",
+    "description": "そろそろ牛乳がなくなりそうなので買いに行く",
+    "completed": false,
+    "created_at": "2026-03-06T02:39:32Z",
+    "updated_at": "2026-03-06T02:39:32Z"
+  }
+]

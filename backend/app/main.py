@@ -3,6 +3,8 @@ import logging
 import os
 import uuid
 
+from dotenv import load_dotenv
+
 from .local_store import LocalStore
 from .models import CreateTodo, Todo, UpdateTodo
 from .subtask_service import (
@@ -11,6 +13,8 @@ from .subtask_service import (
     SubtasksResponse,
     generate_subtasks,
 )
+
+load_dotenv()
 
 logger = logging.getLogger("todo_app")
 

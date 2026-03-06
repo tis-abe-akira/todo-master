@@ -96,7 +96,7 @@ def generate_subtasks(
     title: str,
     description: Optional[str],
     api_key: str,
-    model: str = "gemini-1.5-flash",
+    model: str = "gemini-3.1-flash-lite-preview",
     timeout: int = 30,
 ) -> list[Subtask]:
     """
