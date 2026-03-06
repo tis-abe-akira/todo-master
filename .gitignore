@@ -16,3 +16,8 @@ frontend/node_modules/
 # Todo データファイル（ローカル実行時の永続化ファイル）
 backend/todos.json
 backend/todos.json.bak
+
+# Playwright
+frontend/test-results/
+frontend/playwright-report/
+frontend/.playwright-artifacts/

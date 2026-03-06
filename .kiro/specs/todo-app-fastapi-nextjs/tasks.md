@@ -92,15 +92,19 @@
   - 推定時間: 1.5 時間
   - _Requirements: 5.3, 2.2_
 
-- [ ] 6. テスト（統合・E2E）と品質検証
-- [ ] 6.1 API と LocalStore の統合テスト作成
+- [x] 6. テスト（統合・E2E）と品質検証
+- [x] 6.1 API と LocalStore の統合テスト作成
   - テスト用ファイルを用いた CRUD の正常系・異常系を検証
   - 推定時間: 2.5 時間
+  - 実装日時: 2026-03-06T18:00:00Z
+  - 実装内容: `backend/tests/test_integration.py` に 17 テスト作成（TemporaryDirectory + TestClient）。全 51 テスト GREEN
   - _Requirements: 1.1,1.2,1.3,1.4,2.1,2.3,3.1,3.3_
-- [ ] 6.2 フロントエンド E2E（主要パス） *（遅延可能）*
-  - ブラウザ上で一覧表示、作成、更新、削除の E2E を作成（Cypress 等）
+- [x] 6.2 フロントエンド E2E（主要パス）
+  - ブラウザ上で一覧表示、作成、更新、削除の E2E を Playwright で作成
   - 推定時間: 3 時間
-  - - [ ]* _Requirements: 4.1,4.2,4.3_
+  - 実装日時: 2026-03-06T18:30:00Z
+  - 実装内容: `frontend/e2e/todo.spec.ts` に 13 テスト（一覧・作成・更新・削除・空状態）。Playwright 1.58.2 + Chromium。全 13 テスト GREEN
+  - _Requirements: 4.1,4.2,4.3_
 
 - [ ] 7. ドキュメント・API スキーマ
 - [ ] 7.1 OpenAPI/README 生成と開発者向け手順作成 (P)
