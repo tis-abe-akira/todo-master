@@ -1,9 +1,12 @@
 from datetime import datetime
+import logging
 import os
 import uuid
 
 from .local_store import LocalStore
 from .models import CreateTodo, Todo, UpdateTodo
+
+logger = logging.getLogger("todo_app")
 
 
 def _now_iso() -> str:
@@ -25,6 +28,7 @@ def create_and_persist_todo(store: LocalStore, payload: CreateTodo) -> dict:
     )
     todos.append(todo.model_dump())
     store.save(todos)
+    logger.info("create: Todo created id=%s title=%r", todo.id, todo.title)
     return todo.model_dump()
 
 
@@ -44,7 +48,9 @@ def update_todo(store: LocalStore, todo_id: str, payload: UpdateTodo) -> dict:
             todos[i].update(update_data)
             todos[i]["updated_at"] = _now_iso()
             store.save(todos)
+            logger.info("update: Todo updated id=%s", todo_id)
             return todos[i]
+    logger.warning("update: Todo not found id=%s", todo_id)
     raise KeyError(f"Todo with id '{todo_id}' not found")
 
 
@@ -53,18 +59,31 @@ def delete_todo(store: LocalStore, todo_id: str) -> None:
     todos = store.load()
     new_todos = [item for item in todos if item["id"] != todo_id]
     if len(new_todos) == len(todos):
+        logger.warning("delete: Todo not found id=%s", todo_id)
         raise KeyError(f"Todo with id '{todo_id}' not found")
     store.save(new_todos)
+    logger.info("delete: Todo deleted id=%s", todo_id)
     return None
 
 
 def create_app(store_path: str):
     # Import FastAPI lazily to avoid hard dependency at module import time in tests
-    from fastapi import FastAPI
+    from fastapi import FastAPI, Request
     from fastapi.responses import JSONResponse
 
     app = FastAPI()
     app.state.store = LocalStore(store_path)
+
+    # 5.3: 永続化失敗（IOError/OSError）を 500 + 再試行ヒント付きで返す
+    @app.exception_handler(IOError)
+    async def persistence_error_handler(request: Request, exc: IOError):
+        logger.error("persistence error: %s", exc)
+        return JSONResponse(
+            status_code=500,
+            content={
+                "detail": "データの保存に失敗しました。時間をおいて再試行してください。(retry later)"
+            },
+        )
 
     @app.get("/api/todos", response_model=list[Todo], status_code=200)
     def get_todos():

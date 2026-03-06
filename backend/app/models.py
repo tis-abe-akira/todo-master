@@ -1,20 +1,20 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class CreateTodo(BaseModel):
     """Payload for creating a Todo. Title is required."""
 
-    title: str
-    description: Optional[str] = None
+    title: str = Field(..., max_length=200)
+    description: Optional[str] = Field(default=None, max_length=1000)
 
 
 class UpdateTodo(BaseModel):
     """Payload for updating a Todo. All fields optional to allow partial updates."""
 
-    title: Optional[str] = None
-    description: Optional[str] = None
+    title: Optional[str] = Field(default=None, max_length=200)
+    description: Optional[str] = Field(default=None, max_length=1000)
     completed: Optional[bool] = None
 
 

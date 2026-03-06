@@ -75,17 +75,20 @@
   - 推定時間: 1.5 時間
   - _Requirements: 4.3_
 
-- [ ] 5. ログ・エラー応答・運用対応
-- [ ] 5.1 API ログ出力（作成/更新/削除/エラー）実装 (P)
-  - 標準ログフォーマットを採用し重要イベントを記録する（例: INFO 作成, ERROR 永続化失敗）
+- [x] 5. ログ・エラー応答・運用対応
+- [x] 5.1 API ログ出力（作成/更新/削除/エラー）実装 (P)
+  - 実装: `backend/app/main.py` に `logging.getLogger("todo_app")` を追加。create/update/delete 成功時に INFO、Not Found 時に WARNING を出力。テスト 5 件通過
+  - 実装日時: 2026-03-06T17:00:00Z
   - 推定時間: 1.5 時間
   - _Requirements: 5.1_
-- [ ] 5.2 入力サイズチェックと簡易レート制限の実装
-  - リクエスト本文サイズ検査、必要なら 413/429 を返す方針を実装
+- [x] 5.2 入力サイズチェックと簡易レート制限の実装
+  - 実装: `backend/app/models.py` の CreateTodo/UpdateTodo に `Field(max_length=200)` (title) と `Field(max_length=1000)` (description) を追加。超過時 Pydantic ValidationError（→ FastAPI が 422 を返す）。テスト 5 件通過
+  - 実装日時: 2026-03-06T17:00:00Z
   - 推定時間: 1.5 時間
   - _Requirements: 5.2_
-- [ ] 5.3 永続化失敗時のクライアント向けエラーハンドリング実装
-  - 永続化失敗で 500 を返し、フロントに再試行案内を含める。サーバ側はバックアップ作成/通知を実行
+- [x] 5.3 永続化失敗時のクライアント向けエラーハンドリング実装
+  - 実装: `create_app` に `@app.exception_handler(IOError)` を追加。save() 失敗時に 500 + 再試行案内 JSON を返す。テスト 3 件通過
+  - 実装日時: 2026-03-06T17:00:00Z
   - 推定時間: 1.5 時間
   - _Requirements: 5.3, 2.2_
 
