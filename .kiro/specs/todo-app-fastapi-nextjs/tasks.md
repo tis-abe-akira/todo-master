@@ -106,10 +106,12 @@
   - 実装内容: `frontend/e2e/todo.spec.ts` に 13 テスト（一覧・作成・更新・削除・空状態）。Playwright 1.58.2 + Chromium。全 13 テスト GREEN
   - _Requirements: 4.1,4.2,4.3_
 
-- [ ] 7. ドキュメント・API スキーマ
-- [ ] 7.1 OpenAPI/README 生成と開発者向け手順作成 (P)
+- [x] 7. ドキュメント・API スキーマ
+- [x] 7.1 OpenAPI/README 生成と開発者向け手順作成 (P)
   - 自動生成された OpenAPI を README にまとめ、ローカル起動手順を記載
   - 推定時間: 1.5 時間
+  - 実装日時: 2026-03-06T19:00:00Z
+  - 実装内容: `README.md` を全面更新。前提条件テーブル・Playwright セットアップ・バックエンド 51 件／E2E 13 件テスト実行手順・API スキーマ（Todo/CreateTodo/UpdateTodo/エラー）・技術スタック表を追記。`/openapi.json` 取得コマンドも記載
   - _Requirements: 3.3, 4.1, 5.1_
 
 ## Notes
