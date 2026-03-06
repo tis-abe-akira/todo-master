@@ -1,6 +1,7 @@
 # Todo App — FastAPI + Next.js
 
 シンプルな Todo 管理アプリ。バックエンドに **FastAPI**、フロントエンドに **Next.js 16 (App Router)** を使用しています。
+特徴として、**LangChain と Google Gemini** を活用し、些細なタスクであっても、PMBOKやROI、ステークホルダー分析などの高度なコンサルティング用語を駆使して「大仰なサブタスク」に分解するAI機能を搭載しています。
 
 ---
 
@@ -12,14 +13,17 @@ todo-master/
 │   ├── app/
 │   │   ├── main.py         # エンドポイント + ビジネスロジック
 │   │   ├── models.py       # Pydantic モデル (バリデーション付き)
-│   │   └── local_store.py  # JSON ファイル永続化 (原子書き込み)
-│   ├── tests/        # unittest (51 件)
-│   │   ├── test_api_*.py         # API 単体テスト
+│   │   ├── local_store.py  # JSON ファイル永続化 (原子書き込み)
+│   │   └── subtask_service.py # Gemini API 連携処理と関連ロジック
+│   ├── tests/        # pytest (105 件)
+│   │   ├── test_api_*.py         # API 単体・結合テスト
 │   │   ├── test_integration.py   # LocalStore 統合テスト
 │   │   ├── test_localstore.py    # 永続化層テスト
+│   │   ├── test_subtask_*.py     # サブタスクAI機能の単体・エラー処理テスト
 │   │   ├── test_logging.py       # ログ出力テスト
 │   │   └── test_persistence_failure.py  # エラーハンドリングテスト
 │   ├── pyproject.toml
+│   ├── .env.example  # 環境変数テンプレート（GEMINI_API_KEY等）
 │   └── .venv/        # uv で作成した仮想環境
 └── frontend/         # Next.js 16 (TypeScript, Tailwind CSS v4, SWR)
     ├── src/
@@ -54,6 +58,10 @@ curl -Ls https://astral.sh/uv/install.sh | sh
 
 cd backend
 uv sync          # .venv/ を作成して依存パッケージをインストール
+
+# 環境変数の設定 (AI機能を使用するため)
+cp .env.example .env
+# .env をエディタで開き、GEMINI_API_KEY を設定してください
 ```
 
 ### フロントエンド（初回のみ）
@@ -107,6 +115,7 @@ npm run dev
 | Todo 追加 | タイトルを入力して「+ 追加」→ 一覧に表示される |
 | 完了チェック | チェックボックスをクリック → タイトルに打ち消し線がつく |
 | 編集 | 「編集」ボタン → タイトル/説明を変更して「保存」 |
+| サブタスク生成 | 「🤖 サブタスク分解」ボタン → スピナー付きでAPI経由で大仰なサブタスクが生成・表示される |
 | 削除 | 「削除」ボタン → 一覧から消える |
 | データ永続化 | バックエンド再起動後もデータが残る（`backend/todos.json` に保存） |
 
@@ -114,15 +123,15 @@ npm run dev
 
 ## テスト実行
 
-### バックエンド単体・統合テスト（51 件）
+### バックエンド単体・統合テスト（105 件）
 
 ```bash
 # リポジトリルートから実行
 cd todo-master
-PYTHONPATH=. backend/.venv/bin/python -m unittest discover backend/tests
+PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/tests/ -v
 ```
 
-すべて `OK (ran 51 tests)` になることを確認してください。
+すべて `105 passed` になることを確認してください。
 
 ### フロントエンド E2E テスト — Playwright（13 件）
 
@@ -161,6 +170,7 @@ npm run test:e2e:ui
 | `POST` | `/api/todos` | Todo 作成 | `201 Created` — `Todo` |
 | `PUT` | `/api/todos/{id}` | Todo 更新（部分更新可） | `200 OK` — `Todo` |
 | `DELETE` | `/api/todos/{id}` | Todo 削除 | `204 No Content` |
+| `POST` | `/api/todos/{id}/subtasks` | AIによるサブタスク生成 | `200 OK` — `{ subtasks: Subtask[] }` |
 
 ### スキーマ
 
@@ -203,6 +213,7 @@ npm run test:e2e:ui
 | `404 Not Found` | 指定 ID の Todo が存在しない |
 | `422 Unprocessable Entity` | バリデーションエラー（title が空、文字数超過など） |
 | `500 Internal Server Error` | 永続化ファイルへの書き込み失敗 |
+| `503 Service Unavailable` | AIサービス利用不可、または設定不備（GEMINI_API_KEY） |
 
 ### OpenAPI スキーマ取得
 
@@ -221,6 +232,8 @@ curl http://localhost:8000/openapi.json
 | スタイリング | Tailwind CSS v4 | CSS フレームワーク |
 | バックエンド | FastAPI + Uvicorn (Python 3.11+) | REST API |
 | バリデーション | Pydantic v2 | 入力スキーマ検証 |
+| AI機能 | LangChain + Google Gemini | サブタスク自動生成機能 |
+| 環境変数管理 | python-dotenv | バックエンド設定管理 |
 | 永続化 | ローカル JSON ファイル | 原子書き込み + `.bak` バックアップ |
-| 単体・統合テスト | Python unittest, httpx | バックエンドテスト (51 件) |
+| 単体・統合テスト | pytest, httpx, unittest | バックエンドテスト (105 件) |
 | E2E テスト | Playwright 1.58 + Chromium | ブラウザ自動テスト (13 件) |
