@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import uuid
 
 from .local_store import LocalStore
@@ -95,3 +96,7 @@ def create_app(store_path: str):
         return JSONResponse(content=todo_dict, status_code=201)
 
     return app
+
+
+# uvicorn app.main:app で直接起動できるようにモジュールレベルのインスタンスを作成
+app = create_app(os.path.join(os.path.dirname(__file__), "..", "todos.json"))

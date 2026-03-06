@@ -16,8 +16,9 @@ class TestProjectInit(unittest.TestCase):
             self.assertIn(pkg, content, f"{pkg} not listed in backend/pyproject.toml")
 
     def test_frontend_package_json_contains_next(self):
-        self.assertTrue(os.path.exists("package.json"), "package.json is missing")
-        with open("package.json", "r", encoding="utf-8") as f:
+        pkg_path = os.path.join("frontend", "package.json")
+        self.assertTrue(os.path.exists(pkg_path), "frontend/package.json is missing")
+        with open(pkg_path, "r", encoding="utf-8") as f:
             data = json.load(f)
         deps = {}
         if isinstance(data, dict):

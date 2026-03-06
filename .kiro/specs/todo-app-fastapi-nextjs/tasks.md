@@ -53,21 +53,25 @@
   - 推定時間: 1.5 時間
   - _Requirements: 1.4, 3.2, 3.3_
 
-- [ ] 4. フロントエンド機能実装 (並列可能)
-- [ ] 4.1 タスク一覧ページの実装と API 結合 (P)
-  - 起動時に `GET /api/todos` を呼び、一覧を表示。ロード UI を実装
+- [x] 4. フロントエンド機能実装 (並列可能)
+- [x] 4.1 タスク一覧ページの実装と API 結合 (P)
+  - 実装: `frontend/src/app/todos/page.tsx`, `TodoList.tsx`, `useTodos.ts` を作成。SWR で GET /api/todos を取得し一覧表示。Spinner / EmptyState / ErrorMessage を組み合わせたロード UI を実装
+  - 実装日時: 2026-03-06T16:00:00Z
   - 推定時間: 2 時間
   - _Requirements: 4.1, 1.2_
-- [ ] 4.2 タスク作成 UI と API 呼び出しの実装 (P)
-  - 作成フォームを実装し、POST 送信と成功/失敗フィードバックを表示
+- [x] 4.2 タスク作成 UI と API 呼び出しの実装 (P)
+  - 実装: `AddTodoForm.tsx`, `useCreateTodo.ts` を作成。フォーム送信で POST /api/todos を呼び出し、成功後にフォームをリセット、エラー時に ErrorMessage を表示
+  - 実装日時: 2026-03-06T16:00:00Z
   - 推定時間: 2 時間
   - _Requirements: 4.2, 1.1_
-- [ ] 4.3 タスク更新/削除 UI の実装と API 統合 (P)
-  - 編集フォーム、削除ボタン、更新後の一覧再取得または最小更新を実装
+- [x] 4.3 タスク更新/削除 UI の実装と API 統合 (P)
+  - 実装: `TodoCard.tsx`, `useUpdateTodo.ts`, `useDeleteTodo.ts` を作成。インライン編集モード、チェックボックスによる完了トグル、削除ボタンを実装し SWR mutate で一覧を更新
+  - 実装日時: 2026-03-06T16:00:00Z
   - 推定時間: 2 時間
   - _Requirements: 4.2, 1.3, 1.4_
-- [ ] 4.4 ネットワーク遅延時のローディング・多重送信ガード実装 (P)
-  - ボタンの非活性化、スピナー表示、エラーメッセージ表示を実装
+- [x] 4.4 ネットワーク遅延時のローディング・多重送信ガード実装 (P)
+  - 実装: 各フック (useCreateTodo, useUpdateTodo, useDeleteTodo) に isSubmitting / isDeleting フラグを設け、ボタンを disabled に。Spinner コンポーネント + ErrorMessage でフィードバックを表示
+  - 実装日時: 2026-03-06T16:00:00Z
   - 推定時間: 1.5 時間
   - _Requirements: 4.3_
 
