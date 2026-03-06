@@ -28,7 +28,7 @@
   - サブタスク生成リクエスト受信時と成功時に INFO レベルでログを出力する
   - _Requirements: 1.6, 5.1, 5.2, 5.3, 5.4, 5.5_
 
-- [ ] 3. サブタスク生成 API エンドポイントの実装
+- [x] 3. サブタスク生成 API エンドポイントの実装
   - `create_app()` 内に `POST /api/todos/{id}/subtasks` ルートを追加する
   - 指定された `id` の Todo が存在しない場合は 404 を返す（既存の update/delete パターンと同様）
   - `generate_subtasks()` を呼び出し、成功時は HTTP 200 + `SubtasksResponse` JSON を返す
