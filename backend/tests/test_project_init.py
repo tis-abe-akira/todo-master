@@ -4,17 +4,16 @@ import json
 
 
 class TestProjectInit(unittest.TestCase):
-    def test_backend_requirements_exists_and_contains_packages(self):
+    def test_backend_pyproject_exists_and_contains_packages(self):
+        pyproject_path = os.path.join("backend", "pyproject.toml")
         self.assertTrue(
-            os.path.exists(os.path.join("backend", "requirements.txt")),
-            "backend/requirements.txt is missing",
+            os.path.exists(pyproject_path),
+            "backend/pyproject.toml is missing",
         )
-        with open(
-            os.path.join("backend", "requirements.txt"), "r", encoding="utf-8"
-        ) as f:
+        with open(pyproject_path, "r", encoding="utf-8") as f:
             content = f.read()
         for pkg in ["fastapi", "uvicorn", "pydantic", "pytest"]:
-            self.assertIn(pkg, content, f"{pkg} not listed in backend/requirements.txt")
+            self.assertIn(pkg, content, f"{pkg} not listed in backend/pyproject.toml")
 
     def test_frontend_package_json_contains_next(self):
         self.assertTrue(os.path.exists("package.json"), "package.json is missing")

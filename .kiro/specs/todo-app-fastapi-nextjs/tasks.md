@@ -26,24 +26,30 @@
   - _Requirements: 2.1, 2.2_
 
 - [ ] 3. Todo API サービスとエンドポイント実装
-- [ ] 3.1 Pydantic モデル定義と入力バリデーションの実装
-  - CreateTodo / UpdateTodo / Todo モデルを定義し、バリデーションルールを確立
+ - [x] 3.1 Pydantic モデル定義と入力バリデーションの実装
+  - 実装: `backend/app/models.py` に CreateTodo, UpdateTodo, Todo を追加（単体テスト通過）
+  - 実装日時: 2026-03-06T13:58:00Z
   - 推定時間: 2 時間
   - _Requirements: 3.1_
 - [ ] 3.2 POST /api/todos (タスク作成) の実装と単体テスト
-  - TodoService#create を呼んで LocalStore に永続化。成功時 201 を返す
+ - [x] 3.2 POST /api/todos (タスク作成) の実装と単体テスト
+  - 実装: `backend/app/main.py` に create endpoint と create_and_persist_todo を追加、単体テストで永続化と戻り値 201 を検証
+  - 実装日時: 2026-03-06T14:10:00Z
   - 推定時間: 2 時間
   - _Requirements: 1.1, 3.3, 5.1, 5.3_
-- [ ] 3.3 GET /api/todos (一覧取得) の実装と単体テスト
-  - LocalStore から読み出して Todo[] を返す。エラーは 500 を返す
+- [x] 3.3 GET /api/todos (一覧取得) の実装と単体テスト
+  - 実装: `backend/app/main.py` に `list_todos` 関数と GET エンドポイントを追加。空ストア・複数件・フィールド検証の 3 テスト通過
+  - 実装日時: 2026-03-06T14:30:00Z
   - 推定時間: 1.5 時間
   - _Requirements: 1.2, 3.3, 4.1_
-- [ ] 3.4 PUT /api/todos/{id} (更新) の実装と単体テスト
-  - 存在確認 → 更新 → 永続化。存在しない場合は 404 を返す
+- [x] 3.4 PUT /api/todos/{id} (更新) の実装と単体テスト
+  - 実装: `backend/app/main.py` に `update_todo` 関数と PUT エンドポイントを追加。部分更新・updated_at 変更・404・フィールド保持の 5 テスト通過
+  - 実装日時: 2026-03-06T14:45:00Z
   - 推定時間: 2 時間
   - _Requirements: 1.3, 3.2, 3.3_
-- [ ] 3.5 DELETE /api/todos/{id} (削除) の実装と単体テスト
-  - 存在確認 → 削除。成功時 204 を返す。存在しない場合は 404
+- [x] 3.5 DELETE /api/todos/{id} (削除) の実装と単体テスト
+  - 実装: `backend/app/main.py` に `delete_todo` 関数と DELETE エンドポイントを追加。削除確認・204・404・他 Todo 保持の 4 テスト通過
+  - 実装日時: 2026-03-06T14:55:00Z
   - 推定時間: 1.5 時間
   - _Requirements: 1.4, 3.2, 3.3_
 
