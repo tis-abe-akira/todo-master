@@ -144,7 +144,11 @@ def create_app(store_path: str):
 
     # ─── サブタスク生成エンドポイント ──────────────────────────────────────
 
-    @app.post("/api/todos/{todo_id}/subtasks", response_model=SubtasksResponse, status_code=200)
+    @app.post(
+        "/api/todos/{todo_id}/subtasks",
+        response_model=SubtasksResponse,
+        status_code=200,
+    )
     def create_subtasks(todo_id: str):
         from fastapi import HTTPException
 
@@ -152,9 +156,7 @@ def create_app(store_path: str):
         todos = list_todos(app.state.store)
         todo = next((t for t in todos if t["id"] == todo_id), None)
         if todo is None:
-            raise HTTPException(
-                status_code=404, detail=f"Todo '{todo_id}' not found"
-            )
+            raise HTTPException(status_code=404, detail=f"Todo '{todo_id}' not found")
 
         api_key = os.environ.get("GEMINI_API_KEY", "")
         subtasks = generate_subtasks(
